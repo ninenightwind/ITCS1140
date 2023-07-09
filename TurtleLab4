@@ -1,0 +1,125 @@
+import random
+import turtle
+
+# Set up turtle
+t = turtle.Turtle()
+t.speed(2)
+t.penup()
+t.goto(-200, -200)
+t.pendown()
+
+# Function to draw the gallows
+def draw_gallows():
+    t.forward(200)
+    t.right(90)
+    t.forward(400)
+    t.right(90)
+    t.forward(100)
+    t.right(90)
+    t.forward(50)
+
+# Functions to draw body parts
+def draw_head():
+    t.circle(25)
+
+def draw_body():
+    t.right(90)
+    t.forward(100)
+
+def draw_left_arm():
+    t.right(45)
+    t.forward(50)
+    t.backward(50)
+
+def draw_right_arm():
+    t.left(90)
+    t.forward(50)
+    t.backward(50)
+    t.right(45)
+
+def draw_left_leg():
+    t.right(45)
+    t.forward(50)
+    t.backward(50)
+
+def draw_right_leg():
+    t.left(90)
+    t.forward(50)
+    t.backward(50)
+    t.right(45)
+
+# Function to select a random word from the list
+def select_word():
+    words = ["python", "programming", "coding"]
+    return random.choice(words)
+
+# Function to play the game
+def play_game():
+    word = select_word()
+    guessed_letters = []
+    attempts = 6
+
+    while True:
+        display_word = ""
+        for letter in word:
+            if letter in guessed_letters:
+                display_word += letter + " "
+            else:
+                display_word += "_ "
+
+        print("Word:", display_word)
+        print("Attempts left:", attempts)
+        guess = input("Guess a letter or the whole word: ").lower()
+
+        if guess.isalpha():
+            if len(guess) == 1:
+                if guess in guessed_letters:
+                    print("You already guessed that letter!")
+                elif guess in word:
+                    guessed_letters.append(guess)
+                    if all(letter in guessed_letters for letter in word):
+                        print("Congratulations! You guessed the word:", word)
+                        break
+                else:
+                    attempts -= 1
+                    print("Incorrect guess!")
+                    if attempts == 0:
+                        print("Game over! The word was:", word)
+                        draw_gallows()
+                        break
+                    else:
+                        # Draw corresponding body part
+                        if attempts == 5:
+                            draw_head()
+                        elif attempts == 4:
+                            draw_body()
+                        elif attempts == 3:
+                            draw_left_arm()
+                        elif attempts == 2:
+                            draw_right_arm()
+                        elif attempts == 1:
+                            draw_left_leg()
+                        elif attempts == 0:
+                            draw_right_leg()
+            else:
+                if guess == word:
+                    print("Congratulations! You guessed the word:", word)
+                    break
+                else:
+                    attempts -= 1
+                    print("Incorrect guess!")
+                    if attempts == 0:
+                        print("Game over! The word was:", word)
+                        draw_gallows()
+                        break
+        else:
+            print("Invalid guess!")
+
+# Main function to start the game
+def main():
+    print("Welcome to Hangman!")
+    play_game()
+
+# Start the game
+if __name__ == "__main__":
+    main()
